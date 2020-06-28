@@ -2,7 +2,26 @@ const formidable = require('formidable');
 const _ = require('lodash');
 const fs = require('fs')
 const Product = require("../models/product");
-const { errorHandler } = require("../helpers/dbErrorHandler")
+const { errorHandler } = require("../helpers/dbErrorHandler");
+
+
+exports.productById = (req, res, next, id) => {
+    Product.findById(id).exec((err, product) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            })
+        }
+        req.product = product;
+        next();
+    })
+}
+
+exports.read = (req, res) => {
+    req.product.photo = undefined
+
+    return res.json(req.product)
+}
 
 exports.create = (req, res) => {
 
@@ -56,4 +75,17 @@ exports.create = (req, res) => {
         })
     })
 
+}
+exports.remove = (req, res) => {
+    let product = req.product
+    product.remove((err, deleteProduct) => {
+        if(err){
+            return res.status(400).json({
+                error: errorHandler(err)
+            })
+        }
+        res.json({
+            message: 'product deleted succfully'
+        })
+    })
 }
