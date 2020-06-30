@@ -79,7 +79,7 @@ exports.create = (req, res) => {
 exports.remove = (req, res) => {
     let product = req.product
     product.remove((err, deleteProduct) => {
-        if(err){
+        if (err) {
             return res.status(400).json({
                 error: errorHandler(err)
             })
@@ -112,7 +112,7 @@ exports.update = (req, res) => {
 
 
         let product = req.product;
-   product = _.extend(product, fields)
+        product = _.extend(product, fields)
         // 1kb ==1000
         //1mb = 1000000
 
