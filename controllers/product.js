@@ -130,7 +130,6 @@ exports.update = (req, res) => {
             product.photo.contentType = files.photo.type;
         }
 
-
         product.save((err, result) => {
             if (err) {
                 return res.status(400).json({
@@ -142,4 +141,26 @@ exports.update = (req, res) => {
         })
     })
 
+};
+
+
+/**
+ * * sell/ arrival
+ * 
+ * */
+
+exports.list = (req, res) => {
+    const order = req.query.order ? req.query.order : 'asc';
+    const sortBy = req.query.SortBy ? req.query.sortBy : '_id';
+    const limit = req.query.limit ? parseInt(req.query.limit) : 6;
+
+    Product.find().select("-photo").populate('category').sort([[sortBy, order]]).limit(limit)
+        .exec((err, products) => {
+            if (err) {
+                return res.status(400).json({
+                    error: ' Product not found'
+                })
+            }
+            res.send(products)
+        })
 }
