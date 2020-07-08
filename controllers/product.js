@@ -3,6 +3,7 @@ const _ = require('lodash');
 const fs = require('fs')
 const Product = require("../models/product");
 const { errorHandler } = require("../helpers/dbErrorHandler");
+const category = require('../models/category');
 
 
 exports.productById = (req, res, next, id) => {
@@ -187,6 +188,21 @@ exports.listRelated = (req, res) => {
             })
         }
         res.json(products)
+
+ })
+}
+
+
+exports.listCategories = (req, res) => {
+
+
+    Product.distinct('category', {},(err, categories) => {
+        if (err) {
+            return res.status(400).json({
+                error: ' Product not found'
+            })
+        }
+        res.json(categories)
 
  })
 }
